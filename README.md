@@ -8,6 +8,21 @@ This repository contains the infrastructure and frontend code for **Piridi Shop*
 
 ![Piridi Shop Preview](food-app.PNG)
 
+## ✅ Deployment Status
+
+**Successfully Deployed!** The Piridi Shop website is now live and accessible via AWS CloudFront CDN with HTTPS support.
+
+### Live Website Screenshot
+
+![Piridi Shop Live Deployment](food-app.PNG)
+
+The website features:
+- **Modern Responsive Design** - Works seamlessly on desktop, tablet, and mobile devices
+- **Food Menu Display** - Showcases popular dishes with images and pricing
+- **Lightning-Fast Loading** - Powered by CloudFront global CDN
+- **HTTPS Security** - SSL/TLS encryption with ACM certificates
+- **Custom Domain** - Accessible via piridishop.shop
+
 ## 📋 Overview
 
 This project demonstrates a production-ready setup for hosting a static website on AWS with the following features:
@@ -103,6 +118,10 @@ ACM Certificate (SSL/TLS)
   - Excludes `.tfstate` files
   - Ignores local variables and backups
 
+- **`food-app.PNG`** - Website deployment screenshot
+  - Shows the successfully deployed Piridi Shop website
+  - Demonstrates responsive design and layout
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -150,6 +169,8 @@ ACM Certificate (SSL/TLS)
 1. The CloudFront distribution may take 5-10 minutes to deploy
 2. DNS propagation may take up to 24 hours
 3. Test your website by accessing the domain or CloudFront URL
+4. Verify HTTPS is working with the ACM certificate
+5. Check CloudFront logs for access patterns and performance metrics
 
 ## 📊 Website Features
 
@@ -159,21 +180,31 @@ ACM Certificate (SSL/TLS)
 - **Hero Section**: Eye-catching banner with call-to-action button
 - **Menu Grid**: Displays food items with images and pricing
 - **Footer**: Copyright and attribution
-- **Styling**: Modern color scheme with orange/red theme
+- **Styling**: Modern color scheme with orange/red theme (#ff5722)
+- **Images**: External Unsplash images for food items
 
-### Performance
+### Performance Metrics
 
 - **CDN Caching**: Content cached globally via CloudFront
 - **HTTPS Enforcement**: All traffic redirected to HTTPS
 - **Compression**: Automatic compression for faster delivery
 - **Custom Error Pages**: User-friendly error handling
+- **Cache Duration**: Default cache behavior configured for optimal performance
+
+### Responsive Breakpoints
+
+- **Desktop**: Full grid layout with 4 columns
+- **Tablet**: 2-3 columns depending on screen size
+- **Mobile**: Single column responsive design
 
 ## 🔒 Security Features
 
-- **S3 Block Public Access**: All public access blocked
-- **CloudFront Origin Access Control**: Secure S3 access via OAC
-- **SSL/TLS Encryption**: ACM certificate with TLS 1.2+
+- **S3 Block Public Access**: All public access blocked at S3 bucket level
+- **CloudFront Origin Access Control**: Secure S3 access via OAC (SigV4 signed requests)
+- **SSL/TLS Encryption**: ACM certificate with TLS 1.2+ enforcement
 - **DNS Validation**: Automatic ACM certificate validation via Route53
+- **HTTPS Redirect**: All HTTP traffic automatically redirected to HTTPS
+- **Bucket Policy**: Restricts access to CloudFront distribution only
 
 ## 📈 Customization
 
@@ -184,6 +215,7 @@ Edit `index.html` to:
 - Update menu items and pricing
 - Modify styling and colors
 - Add new sections or features
+- Update food images and descriptions
 
 ### Change Domain
 
@@ -207,6 +239,18 @@ provider "aws" {
 }
 ```
 
+### Add More Menu Items
+
+Edit `index.html` in the cards section:
+```html
+<div class="card">
+  <img src="https://images.unsplash.com/photo-xxxx">
+  <h3>Your Dish Name</h3>
+  <p>Description</p>
+  <p class="price">₹Price</p>
+</div>
+```
+
 ## 🧹 Cleanup
 
 To remove all AWS resources:
@@ -217,7 +261,7 @@ terraform destroy
 
 ⚠️ **Warning**: This will delete:
 - S3 bucket and all contents
-- CloudFront distribution
+- CloudFront distribution (takes ~15-20 minutes)
 - Route53 records
 - ACM certificate
 
@@ -228,10 +272,22 @@ terraform destroy
 
 ## 🛠️ Tools & Technologies
 
-- **Terraform**: Infrastructure automation and management
+- **Terraform**: Infrastructure automation and management (v1.13.0+)
 - **AWS Services**: S3, CloudFront, Route53, ACM
 - **HTML5**: Semantic markup for modern websites
 - **CSS3**: Responsive styling with Grid and Flexbox
+- **DNS**: Route53 for domain management
+
+## 📊 Deployment Outputs
+
+After successful deployment, you will receive:
+
+```
+cloudfront_url = d123456789.cloudfront.net
+website_url = https://piridishop.shop
+```
+
+Access your website using either URL!
 
 ## 📚 Resources
 
@@ -241,12 +297,35 @@ terraform destroy
 - [Route53 Documentation](https://docs.aws.amazon.com/route53/)
 - [AWS ACM Documentation](https://docs.aws.amazon.com/acm/)
 
+## 🐛 Troubleshooting
+
+### Certificate Validation Issues
+- Ensure Route53 hosted zone exists for your domain
+- Check DNS records are properly created
+- Wait 5-10 minutes for validation records to propagate
+
+### CloudFront Not Serving Content
+- Verify S3 bucket policy allows CloudFront access
+- Check Origin Access Control (OAC) is properly configured
+- Clear CloudFront cache if needed
+
+### DNS Not Resolving
+- Verify Route53 alias record points to CloudFront
+- Check nameservers are updated in domain registrar
+- Wait up to 24 hours for DNS propagation
+
+### Website Shows 403 Errors
+- Confirm `index.html` exists in S3 bucket
+- Check S3 bucket public access is blocked (expected)
+- Verify CloudFront OAC has proper permissions
+
 ## 📞 Support
 
 For issues or questions:
 - Check existing GitHub Issues
 - Review AWS documentation
 - Verify Route53 hosted zone exists for your domain
+- Enable CloudFront access logs for debugging
 
 ## 📄 License
 
@@ -258,6 +337,8 @@ This project is open source and available under the MIT License.
 
 ---
 
-**Happy Deploying! 🚀**
+**Successfully Deployed! 🚀**
 
 Built with ❤️ using Terraform and AWS
+
+**Status**: ✅ Live at [piridishop.shop](https://piridishop.shop)
